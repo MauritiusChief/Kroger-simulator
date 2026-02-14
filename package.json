@@ -1,0 +1,22 @@
+{
+  "name": "kroger-inventory-miniature",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm run dev --workspace @kroger-mini/backend",
+    "dev:frontend": "npm run dev --workspace @kroger-mini/frontend",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:backend": "npm run test --workspace @kroger-mini/backend",
+    "test:frontend": "npm run test --workspace @kroger-mini/frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  }
+}
