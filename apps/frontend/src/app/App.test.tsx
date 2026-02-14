@@ -60,7 +60,7 @@ describe("App navigation", () => {
       return jsonResponse({ status: "unresolved" });
     });
 
-    Object.defineProperty(global, "fetch", {
+    Object.defineProperty(globalThis, "fetch", {
       writable: true,
       value: fetchMock
     });
