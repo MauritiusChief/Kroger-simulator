@@ -42,6 +42,10 @@ body {
   padding: 10px;
 }
 
+.sidebar {
+  overflow-x: scroll;
+}
+
 .toolbar {
   display: flex;
   gap: 8px;
