@@ -52,3 +52,18 @@ npm run e2e --workspace @kroger-mini/frontend
 - All data persistence is in-memory and reset on restart.
 - Internal Kroger APIs are replaced with local mock upstream adapters.
 - Scanner integration in V1 uses payload simulation and keeps a `ScannerAdapter` interface for real camera integration later.
+
+## Challenge 1 Replay (Concurrency Problem Baseline)
+
+This miniature intentionally keeps shared folder updates as last-write-wins (no OCC), so concurrency conflicts can be replayed before implementing the fix.
+
+1. Start frontend/backend (`npm run dev`), then open two manager sessions (A/B) on `/inventory`.
+2. In both sessions, wait for the same initial folder tree to load.
+3. In session A, drag `Seasonal` onto `Dairy`.
+4. Without refreshing B, in session B drag `Seasonal` to another parent (for example back to `Produce`).
+5. Both operations return success.
+6. Refresh session A. The folder tree now reflects B's later write, showing the silent overwrite conflict.
+
+For deterministic automated replay, use:
+- backend reset endpoint: `POST /api/dev/reset` (non-production only)
+- Cypress spec: `apps/frontend/cypress/e2e/folder_concurrency_problem.cy.ts`

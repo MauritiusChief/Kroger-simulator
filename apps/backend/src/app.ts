@@ -4,6 +4,7 @@ import { inventoryRouter } from "./routes/inventoryRoutes.js";
 import { folderRouter } from "./routes/folderRoutes.js";
 import { tagRouter } from "./routes/tagRoutes.js";
 import { scanRouter } from "./routes/scanRoutes.js";
+import { devRouter } from "./routes/devRoutes.js";
 import { metricsStore } from "./observability/metrics.js";
 import { requestContextMiddleware } from "./observability/requestContext.js";
 import { errorHandler, notFoundHandler } from "./domain/errors.js";
@@ -25,6 +26,9 @@ export function createApp() {
   app.use("/api/folders", folderRouter);
   app.use("/api/tags", tagRouter);
   app.use("/api/scans", scanRouter);
+  if (process.env.NODE_ENV !== "production") {
+    app.use("/api/dev", devRouter);
+  }
 
   app.use(notFoundHandler);
   app.use(errorHandler);

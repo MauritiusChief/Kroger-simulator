@@ -64,6 +64,20 @@ export function updateFolder(
   if (!folder) {
     throw new HttpError(404, "FOLDER_NOT_FOUND", `Folder not found: ${folderId}`);
   }
+  // Challenge 1 baseline: intentionally last-write-wins (no OCC/version checks).
+  applyFolderMutationLastWriteWins(folderId, folder, payload);
+  return folder;
+}
+
+function applyFolderMutationLastWriteWins(
+  folderId: string,
+  folder: FolderNode,
+  payload: {
+    name?: string;
+    parentId?: string | null;
+    permission?: FolderNode["permission"];
+  }
+): void {
   if (payload.name !== undefined) {
     if (!payload.name.trim()) {
       throw new HttpError(400, "INVALID_FOLDER_NAME", "Folder name cannot be empty.");
@@ -80,5 +94,4 @@ export function updateFolder(
   if (payload.permission) {
     folder.permission = payload.permission;
   }
-  return folder;
 }

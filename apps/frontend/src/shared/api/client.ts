@@ -59,6 +59,13 @@ export class ApiClient {
     return this.request<FolderNode[]>("/api/folders");
   }
 
+  createFolder(payload: Pick<FolderNode, "name" | "parentId">): Promise<FolderNode> {
+    return this.request<FolderNode>("/api/folders", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  }
+
   patchFolder(folderId: string, payload: Partial<Pick<FolderNode, "name" | "parentId" | "permission">>): Promise<FolderNode> {
     return this.request<FolderNode>(`/api/folders/${folderId}`, {
       method: "PATCH",

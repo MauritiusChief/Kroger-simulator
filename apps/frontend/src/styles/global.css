@@ -81,6 +81,26 @@ td {
   padding: 0;
 }
 
+.folder-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.folder-drop-root {
+  margin-top: 8px;
+  border: 1px dashed #94a3b8;
+  border-radius: 6px;
+  padding: 8px;
+  color: #334155;
+}
+
+.rename-controls {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: 6px;
+}
+
 .active-folder {
   font-weight: 700;
 }

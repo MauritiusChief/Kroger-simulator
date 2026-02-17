@@ -1,8 +1,13 @@
 import request from "supertest";
 import { createApp } from "../src/app.js";
+import { resetMockState } from "../src/mocks/state.js";
 
 describe("Inventory aggregation API", () => {
   const app = createApp();
+
+  beforeEach(() => {
+    resetMockState();
+  });
 
   it("lists items with pagination and filtering", async () => {
     const response = await request(app)
@@ -26,6 +31,26 @@ describe("Inventory aggregation API", () => {
 
   it("prevents folder move cycles", async () => {
     await request(app).patch("/api/folders/folder-root-1").send({ parentId: "folder-child-1" }).expect(400);
+  });
+
+  it("keeps challenge-1 baseline behavior: last write wins without OCC rejection", async () => {
+    await request(app).patch("/api/folders/folder-child-1").send({ parentId: "folder-root-2" }).expect(200);
+    await request(app).patch("/api/folders/folder-child-1").send({ parentId: "folder-root-1" }).expect(200);
+
+    const list = await request(app).get("/api/folders").expect(200);
+    const produce = list.body.find((node: { id: string }) => node.id === "folder-root-1");
+    const childIds = (produce?.children ?? []).map((node: { id: string }) => node.id);
+    expect(childIds).toContain("folder-child-1");
+  });
+
+  it("resets in-memory data in non-production via /api/dev/reset", async () => {
+    await request(app).patch("/api/folders/folder-child-1").send({ parentId: "folder-root-2" }).expect(200);
+    await request(app).post("/api/dev/reset").expect(204);
+
+    const list = await request(app).get("/api/folders").expect(200);
+    const produce = list.body.find((node: { id: string }) => node.id === "folder-root-1");
+    const childIds = (produce?.children ?? []).map((node: { id: string }) => node.id);
+    expect(childIds).toContain("folder-child-1");
   });
 
   it("resolves UPC/EAN/QR scans and handles unresolved payload", async () => {
