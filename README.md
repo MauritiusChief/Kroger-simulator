@@ -60,7 +60,7 @@ This miniature intentionally keeps shared folder updates as last-write-wins (no 
 1. Start frontend/backend (`npm run dev`), then open two manager sessions (A/B) on `/inventory`.
 2. In both sessions, wait for the same initial folder tree to load.
 3. In session A, drag `Seasonal` onto `Dairy`.
-4. Without refreshing B, in session B drag `Seasonal` to another parent (for example back to `Produce`).
+4. Without refreshing B, in session B drag `Seasonal` to another parent (for example to root level).
 5. Both operations return success.
 6. Refresh session A. The folder tree now reflects B's later write, showing the silent overwrite conflict.
 

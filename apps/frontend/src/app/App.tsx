@@ -42,6 +42,17 @@ function AppInner({ apiBaseUrl, userRole, onNavigate }: InventoryMfeProps) {
           </Routes>
         </main>
       </div>
+      <footer>
+        <p>Challenge 1 Replay (Concurrency Problem Baseline)</p>
+        <ol>
+          <li>Start frontend/backend (`npm run dev`), then open two manager sessions (A/B) on `/inventory`.</li>
+          <li>In both sessions, wait for the same initial folder tree to load.</li>
+          <li>In session A, drag `Seasonal` onto `Dairy`.</li>
+          <li>Without refreshing B, in session B drag `Seasonal` to another parent (for example to root level).</li>
+          <li>Both operations return success.</li>
+          <li>Refresh session A. The folder tree now reflects B's later write, showing the silent overwrite conflict.</li>
+        </ol>
+      </footer>
     </div>
   );
 }

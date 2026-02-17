@@ -178,8 +178,8 @@ export function FolderPanel({ api, userRole, activeFolderId, onSelectFolder }: F
             <button className={node.id === activeFolderId ? "active-folder" : ""} onClick={() => onSelectFolder(node.id)}>
               {node.name}
             </button>
-            <small>{userRole === "manager" ? "editable" : "read-only"}</small>
-            <span data-testid={`folder-parent-${node.id}`}>{node.parentId ?? "root"}</span>
+            <small title={userRole === "manager" ? "editable" : "read-only"}>{userRole === "manager" ? "⚙️" : "🔒"}</small>
+            {/* <span data-testid={`folder-parent-${node.id}`}>{node.parentId ?? "root"}</span> */}
             {userRole === "manager" ? (
               <>
                 {renameTargetId === node.id ? (
@@ -189,18 +189,18 @@ export function FolderPanel({ api, userRole, activeFolderId, onSelectFolder }: F
                       value={renameValue}
                       onChange={(event) => setRenameValue(event.target.value)}
                     />
-                    <button onClick={() => void submitRename()}>Save</button>
+                    <button onClick={() => void submitRename()}>✔️</button>
                     <button
                       onClick={() => {
                         setRenameTargetId("");
                         setRenameValue("");
                       }}
                     >
-                      Cancel
+                      ❌
                     </button>
                   </span>
                 ) : (
-                  <button onClick={() => startRename(node)}>Rename</button>
+                  <button onClick={() => startRename(node)}>✏️</button>
                 )}
               </>
             ) : null}
